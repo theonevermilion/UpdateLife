@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeTrack — Personal Dashboard</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2d;--panel2:#172238;--line:#26334d;--text:#edf2ff;--muted:#8f9bb5;--accent:#8b7cff;--green:#39d9a5;--red:#ff718b;--yellow:#ffc86b;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top left,#17203a 0,#0b1020 48%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}.sidebar{padding:26px 18px;border-right:1px solid var(--line);background:#0c1324cc;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:800;margin:0 10px 35px}.logo{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,#9a8cff,#5b4ce2);display:grid;place-items:center;box-shadow:0 8px 25px #6555e855}.nav-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin:20px 12px 9px}.nav button{width:100%;padding:12px 14px;text-align:left;color:var(--muted);background:transparent;border-radius:12px;margin:3px 0;display:flex;gap:12px;align-items:center}.nav button.active,.nav button:hover{background:#222c46;color:#fff}.nav button.active{box-shadow:inset 3px 0 var(--accent)}.side-note{position:absolute;bottom:20px;left:18px;right:18px;padding:14px;border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:12px}
+main{padding:30px clamp(18px,4vw,54px);max-width:1500px;width:100%;margin:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:30px}.eyebrow{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:1.4px;text-transform:uppercase}.topbar h1{font-size:clamp(25px,3vw,34px);margin:5px 0}.date{color:var(--muted)}.avatar{width:42px;height:42px;border-radius:50%;background:#2c3654;display:grid;place-items:center;font-weight:700;border:1px solid #465474}
+.page{display:none}.page.active{display:block}.grid{display:grid;gap:18px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:22px}.card{background:linear-gradient(145deg,#151f34,#11192b);border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0}.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.stat-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#272f4c}.stat-value{font-size:27px;font-weight:800;margin:13px 0 3px;letter-spacing:-.5px}.stat-sub{font-size:12px;color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}.dashboard-grid{grid-template-columns:1.2fr 1fr}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 17px}.section-head h2{font-size:17px;margin:0}.section-head p{font-size:12px;color:var(--muted);margin:3px 0 0}.btn{background:var(--accent);color:white;padding:10px 15px;border-radius:11px;font-weight:700}.btn.secondary{background:#26324c;color:#dce5ff}.btn.danger{background:#4b2434;color:#ffb6c4}.btn.small{padding:7px 10px;font-size:12px}.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.field{background:#0d1526;border:1px solid #2a3853;color:var(--text);padding:11px 12px;border-radius:10px;min-width:0;flex:1}.field:focus{outline:2px solid #8172ff66;border-color:var(--accent)}.field::placeholder{color:#6f7c97}.list{display:grid;gap:10px}.item{display:flex;align-items:center;gap:12px;background:#10182a;border:1px solid #202d46;border-radius:13px;padding:12px}.item-main{flex:1;min-width:0}.item-title{font-weight:650;overflow-wrap:anywhere}.item-meta{font-size:12px;color:var(--muted);margin-top:3px}.item-actions{display:flex;gap:6px}.check{width:22px;height:22px;accent-color:var(--green)}.progress{height:8px;background:#27334c;border-radius:99px;overflow:hidden;margin-top:13px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#7c6cff,#42d8ad);border-radius:99px}.bar-wrap{display:flex;align-items:end;gap:10px;height:160px;padding:15px 0 0}.bar-col{flex:1;text-align:center;height:100%;display:flex;flex-direction:column;justify-content:end;gap:8px}.bar{min-height:4px;background:linear-gradient(180deg,#9a8cff,#5d50db);border-radius:7px 7px 2px 2px}.bar-label{font-size:11px;color:var(--muted)}.transaction{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #202b42}.transaction:last-child{border-bottom:0}.badge{font-size:11px;border-radius:8px;padding:4px 8px;background:#25354b;color:#a8c9ff}.empty{color:var(--muted);text-align:center;padding:28px 10px;font-size:13px}.link-url{color:#a8b7d8;font-size:12px;overflow-wrap:anywhere}.pill{display:inline-block;font-size:11px;padding:4px 8px;border-radius:99px;background:#2a2549;color:#c4baff}
+.mobile-menu{display:none}
+.schedule-date{font-size:12px;color:var(--yellow)}.alarm-active{color:var(--green)}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.dashboard-grid{grid-template-columns:1fr}.app{grid-template-columns:210px 1fr}}
+@media(max-width:700px){.app{display:block}.sidebar{position:fixed;z-index:20;top:auto;bottom:0;left:0;right:0;height:auto;padding:8px 10px;background:#10182af5;border-right:0;border-top:1px solid var(--line)}.brand,.nav-label,.side-note{display:none}.nav{display:flex;justify-content:space-around}.nav button{justify-content:center;flex-direction:column;gap:3px;font-size:10px;padding:8px 5px;margin:0}.nav button span{font-size:18px}.nav button.active{box-shadow:inset 0 3px var(--accent)}main{padding:22px 15px 100px}.topbar{margin-bottom:22px}.stats{gap:10px}.card{padding:15px}.stat-value{font-size:22px}.section-head{align-items:flex-start}.form-row .field{flex-basis:100%}.form-row .btn{width:100%}}
+
+.ai-layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:16px}
+.chat-card{display:flex;flex-direction:column;min-height:540px;padding:0;overflow:hidden}
+.chat-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.ai-orb{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,#9a8cff,#44d9b0);display:grid;place-items:center;color:#101629;font-weight:900}
+.chat-head small{display:block;color:var(--muted);font-size:12px}
+.chat-log{flex:1;min-height:340px;max-height:570px;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.chat-msg{max-width:86%;padding:12px 15px;border-radius:15px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}
+.chat-msg.ai{align-self:flex-start;background:#1a263d;border:1px solid #293853;border-bottom-left-radius:5px}
+.chat-msg.user{align-self:flex-end;background:#6558d9;color:white;border-bottom-right-radius:5px}
+.chat-msg .msg-role{font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin-bottom:5px;font-weight:700}
+.chat-compose{padding:15px;border-top:1px solid var(--line);display:flex;gap:10px;background:#10182a}
+.chat-compose textarea{resize:vertical;min-height:46px;max-height:140px}
+.chat-hint{font-size:12px;color:var(--muted);line-height:1.6}
+.ai-settings{display:grid;gap:12px}
+.ai-settings label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}
+.ai-status{padding:10px 12px;border-radius:10px;background:#202b42;color:#bac8e4;font-size:12px}
+.chat-typing{color:var(--muted);font-size:12px;padding:0 20px 10px}
+@media(max-width:850px){.ai-layout{grid-template-columns:1fr}.chat-card{min-height:480px}.chat-log{max-height:55vh}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">✦</div> LifeTrack</div>
+  <div class="nav-label">Workspace</div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard"><span>⌂</span>Dashboard</button>
+    <button data-page="habits"><span>✓</span>Habits</button>
+    <button data-page="money"><span>◈</span>Money</button>
+    <button data-page="links"><span>↗</span>Link Saver</button>
+    <button data-page="assistant"><span>✧</span>AI Assistant</button>
+    <button data-page="notes"><span>▤</span>Catatan</button>
+    <button data-page="schedule"><span>◷</span>Calendar & Alarm</button>
+  </nav>
+  <div class="side-note">✨ Small steps, better days.<br>Data tersimpan di browser ini.</div>
+</aside>
+<main>
+  <header class="topbar">
+    <div><div class="eyebrow">PERSONAL PRODUCTIVITY</div><h1 id="greeting">Your space, your pace.</h1><div class="date" id="today"></div></div>
+    <div class="avatar">LT</div>
+  </header>
+
+  <section class="page active" id="dashboard">
+    <div class="grid stats">
+      <div class="card"><div class="stat-top">Habit selesai <span class="stat-icon">✓</span></div><div class="stat-value" id="statHabits">0/0</div><div class="stat-sub">Progress hari ini</div></div>
+      <div class="card"><div class="stat-top">Saldo tercatat <span class="stat-icon">◈</span></div><div class="stat-value" id="statBalance">Rp0</div><div class="stat-sub">Pemasukan − pengeluaran</div></div>
+      <div class="card"><div class="stat-top">Pengeluaran <span class="stat-icon">↘</span></div><div class="stat-value" id="statExpense">Rp0</div><div class="stat-sub">Total semua catatan</div></div>
+      <div class="card"><div class="stat-top">Link tersimpan <span class="stat-icon">↗</span></div><div class="stat-value" id="statLinks">0</div><div class="stat-sub">Koleksi pribadi</div></div>
+      <div class="card"><div class="stat-top">Catatan <span class="stat-icon">▤</span></div><div class="stat-value" id="statNotes">0</div><div class="stat-sub">Ide dan hal penting</div></div>
+    </div>
+    <div class="grid dashboard-grid">
+      <div class="card"><div class="section-head"><div><h2>Today's habits</h2><p>Jaga konsistensi, sedikit demi sedikit.</p></div><button class="btn secondary small" onclick="showPage('habits')">Lihat semua →</button></div><div id="dashHabits" class="list"></div></div>
+      <div class="card"><div class="section-head"><div><h2>Money overview</h2><p>Ringkasan transaksi terbaru.</p></div><button class="btn secondary small" onclick="showPage('money')">Detail →</button></div><div id="dashMoney"></div></div>
+      <div class="card"><div class="section-head"><div><h2>Weekly spending</h2><p>Grafik pengeluaran 7 hari terakhir.</p></div></div><div id="weeklyChart" class="bar-wrap"></div></div>
+      <div class="card"><div class="section-head"><div><h2>Recently saved</h2><p>Link yang baru kamu simpan.</p></div><button class="btn secondary small" onclick="showPage('links')">Buka koleksi →</button></div><div id="dashLinks" class="list"></div></div>
+      <div class="card"><div class="section-head"><div><h2>Recent notes</h2><p>Catatan yang terakhir diperbarui.</p></div><button class="btn secondary small" onclick="showPage('notes')">Buka catatan →</button></div><div id="dashNotes" class="list"></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="habits">
+    <div class="section-head"><div><h2>Habit Tracker</h2><p>Bangun rutinitas yang ingin kamu pertahankan.</p></div><span class="pill" id="habitProgress">0% hari ini</span></div>
+    <div class="card"><form id="habitForm" class="form-row"><input class="field" id="habitName" placeholder="Contoh: Baca 10 halaman" required maxlength="80"><button class="btn">+ Tambah habit</button></form><div id="habitList" class="list"></div></div>
+  </section>
+
+  <section class="page" id="money">
+    <div class="section-head"><div><h2>Money Tracker</h2><p>Catat pemasukan dan pengeluaranmu.</p></div></div>
+    <div class="grid stats">
+      <div class="card"><div class="stat-top">Pemasukan</div><div class="stat-value positive" id="moneyIncome">Rp0</div></div>
+      <div class="card"><div class="stat-top">Pengeluaran</div><div class="stat-value negative" id="moneyExpense">Rp0</div></div>
+      <div class="card"><div class="stat-top">Saldo</div><div class="stat-value" id="moneyBalance">Rp0</div></div>
+      <div class="card"><div class="stat-top">Transaksi</div><div class="stat-value" id="moneyCount">0</div></div>
+    </div>
+    <div class="card"><form id="moneyForm" class="form-row">
+      <select class="field" id="moneyType"><option value="expense">Pengeluaran</option><option value="income">Pemasukan</option></select>
+      <input class="field" id="moneyTitle" placeholder="Nama transaksi" required maxlength="80">
+      <input class="field" id="moneyAmount" type="number" min="1" placeholder="Nominal (Rp)" required>
+      <select class="field" id="moneyCategory"><option>Makanan</option><option>Transportasi</option><option>Belanja</option><option>Tagihan</option><option>Gaji</option><option>Freelance</option><option>Lainnya</option></select>
+      <input class="field" id="moneyDate" type="date" required>
+      <button class="btn">+ Simpan transaksi</button>
+    </form><div id="transactionList"></div></div>
+  </section>
+
+  <section class="page" id="schedule">
+    <div class="section-head"><div><h2>Calendar & Alarm</h2><p>Atur jadwal, reminder habit, dan alarm pribadi.</p></div><button class="btn secondary small" onclick="exportCalendar()">Export .ics</button></div>
+    <div class="card" style="margin-bottom:18px"><div class="section-head"><div><h2>Pengaturan alarm</h2><p>Izinkan notifikasi dan aktifkan suara saat alarm berbunyi.</p></div></div><div class="form-row"><button class="btn" id="enableAlarm" type="button" onclick="enableAlarm()">Aktifkan notifikasi & suara</button><span class="item-meta" id="alarmStatus" style="align-self:center">Alarm aktif saat halaman dibuka.</span></div></div>
+    <div class="card" style="margin-bottom:18px"><form id="scheduleForm" class="form-row">
+      <input class="field" id="scheduleTitle" placeholder="Nama kegiatan / alarm" required maxlength="100">
+      <input class="field" id="scheduleDate" type="datetime-local" required>
+      <select class="field" id="scheduleKind"><option value="reminder">Reminder</option><option value="alarm">Alarm bersuara</option><option value="habit">Habit</option><option value="payment">Pembayaran</option></select>
+      <input class="field" id="scheduleNote" placeholder="Catatan (opsional)" maxlength="160">
+      <button class="btn">+ Buat jadwal</button>
+    </form></div>
+    <div class="card"><div class="section-head"><div><h2>Agenda & alarm</h2><p>Jadwal tersimpan di browser ini.</p></div><span class="pill" id="scheduleCount">0 jadwal</span></div><div id="scheduleList" class="list"></div></div>
+    <div class="card" style="margin-top:18px"><h2 style="font-size:16px">Google Calendar</h2><p class="item-meta">Gunakan tombol “Google Calendar” pada jadwal untuk membuat event, atau ekspor semua jadwal sebagai file .ics lalu impor ke Google Calendar.</p><a class="btn secondary small" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener">Buka Google Calendar ↗</a></div>
+  </section>
+
+  <section class="page" id="notes">
+    <div class="section-head"><div><h2>Notes / Catatan</h2><p>Simpan ide, catatan belajar, dan hal penting dalam satu tempat.</p></div><span class="pill" id="noteCount">0 catatan</span></div>
+    <div class="card"><form id="noteForm" class="form-row">
+      <input class="field" id="noteTitle" placeholder="Judul catatan" required maxlength="120">
+      <select class="field" id="noteCategory"><option>Personal</option><option>Belajar</option><option>Ide</option><option>To-do</option><option>Kerja</option><option>Lainnya</option></select>
+      <textarea class="field" id="noteBody" placeholder="Tulis catatanmu di sini..." rows="5" required maxlength="12000" style="flex-basis:100%;resize:vertical"></textarea>
+      <div class="form-row" style="width:100%;margin-bottom:0"><button class="btn" id="noteSubmit">+ Simpan catatan</button><button class="btn secondary" type="button" id="noteCancel" hidden onclick="cancelNoteEdit()">Batal edit</button></div>
+    </form>
+    <div class="form-row" style="margin-top:16px"><input class="field" id="noteSearch" placeholder="Cari judul, isi, atau kategori catatan..."></div>
+    <div id="noteList" class="list"></div></div>
+  </section>
+
+  <section class="page" id="links">
+    <div class="section-head"><div><h2>Link Saver</h2><p>Simpan artikel, tools, dan referensi favorit.</p></div><span class="pill" id="linkCount">0 links</span></div>
+    <div class="card"><form id="linkForm" class="form-row">
+      <input class="field" id="linkTitle" placeholder="Judul link" required maxlength="100">
+      <input class="field" id="linkUrl" type="url" placeholder="https://example.com" required>
+      <input class="field" id="linkTag" placeholder="Kategori (opsional)" maxlength="30">
+      <button class="btn">+ Simpan link</button>
+    </form>
+    <div class="form-row"><input class="field" id="linkSearch" placeholder="Cari judul, URL, atau kategori..."></div>
+    <div id="linkList" class="list"></div></div>
+  </section>
+
+  <section class="page" id="assistant">
+    <div class="section-head"><div><h2>AI Assistant</h2><p>Tanya, brainstorming, belajar, atau minta bantuan menyusun rencana.</p></div><span class="pill">AI Chat</span></div>
+    <div class="ai-layout">
+      <div class="card chat-card">
+        <div class="chat-head"><div class="ai-orb">✦</div><div><strong>LifeTrack Assistant</strong><small>Asisten percakapan untuk pertanyaan umum</small></div></div>
+        <div class="chat-log" id="aiChatLog">
+          <div class="chat-msg ai"><div class="msg-role">LifeTrack AI</div>Halo! Aku siap membantu menjawab pertanyaan, menjelaskan konsep, atau menyusun ide. Hubungkan endpoint AI terlebih dahulu di panel konfigurasi agar chat mendapat jawaban dari model AI.</div>
+        </div>
+        <div class="chat-typing" id="aiTyping" hidden>AI sedang menyiapkan jawaban...</div>
+        <form class="chat-compose" id="aiChatForm">
+          <textarea class="field" id="aiPrompt" rows="2" placeholder="Tulis pertanyaanmu..." required></textarea>
+          <button class="btn" id="aiSend" type="submit">Kirim ↗</button>
+        </form>
+      </div>
+      <aside class="card">
+        <div class="section-head"><div><h2>Konfigurasi AI</h2><p>Hubungkan dengan backend AI milikmu.</p></div></div>
+        <div class="ai-settings">
+          <div><label for="aiEndpoint">API endpoint (backend)</label><input class="field" id="aiEndpoint" type="url" placeholder="https://domainmu.com/api/assistant"></div>
+          <button class="btn secondary" id="aiSaveEndpoint" type="button">Simpan endpoint</button>
+          <div class="ai-status" id="aiStatus">Belum terhubung — isi endpoint backend.</div>
+          <p class="chat-hint">Endpoint diharapkan menerima POST JSON <code>{ "message": "...", "history": [...] }</code> dan mengembalikan JSON <code>{ "reply": "..." }</code>.</p>
+          <p class="chat-hint">Jangan masukkan API key provider AI ke file HTML. Simpan secret di server/backend agar tidak terlihat pengunjung.</p>
+          <button class="btn danger small" id="aiClearChat" type="button">Hapus riwayat chat</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+</main>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const load=(key,fallback=[])=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
+const save=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
+let habits=load('lt_habits'),transactions=load('lt_transactions'),links=load('lt_links');
+let notes=load('lt_notes'),editingNoteId=null;
+const todayKey=()=>new Date().toISOString().slice(0,10);
+$('today').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+$('moneyDate').value=todayKey();
+$('greeting').textContent=(new Date().getHours()<11?'Selamat pagi!':new Date().getHours()<15?'Selamat siang!':new Date().getHours()<18?'Selamat sore!':'Selamat malam!');
+const rupiah=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function habitDone(h){return (h.done||[]).includes(todayKey())}
+function toggleHabit(id){habits=habits.map(h=>{if(h.id===id){let d=h.done||[];h.done=habitDone(h)?d.filter(x=>x!==todayKey()):[...d,todayKey()]}return h});save('lt_habits',habits);render()}
+function deleteHabit(id){if(confirm('Hapus habit ini?')){habits=habits.filter(h=>h.id!==id);save('lt_habits',habits);render()}}
+$('habitForm').addEventListener('submit',e=>{e.preventDefault();habits.unshift({id:Date.now(),name:$('habitName').value.trim(),done:[]});save('lt_habits',habits);$('habitName').value='';render()});
+function renderHabits(){let done=habits.filter(habitDone).length,total=habits.length,pct=total?Math.round(done/total*100):0;$('habitProgress').textContent=pct+'% hari ini';$('statHabits').textContent=done+'/'+total;
+const row=h=>`<div class="item"><input class="check" type="checkbox" ${habitDone(h)?'checked':''} onchange="toggleHabit(${h.id})"><div class="item-main"><div class="item-title" style="${habitDone(h)?'text-decoration:line-through;color:var(--muted)':''}">${escapeHtml(h.name)}</div><div class="item-meta">${(h.done||[]).length} hari tercatat</div></div><button class="btn danger small" onclick="deleteHabit(${h.id})">Hapus</button></div>`;
+$('habitList').innerHTML=habits.length?habits.map(row).join(''):'<div class="empty">Belum ada habit. Tambahkan kebiasaan pertamamu.</div>';
+$('dashHabits').innerHTML=habits.length?habits.slice(0,5).map(row).join(''):'<div class="empty">Habit harianmu akan muncul di sini.</div>';
+}
+$('moneyForm').addEventListener('submit',e=>{e.preventDefault();transactions.unshift({id:Date.now(),type:$('moneyType').value,title:$('moneyTitle').value.trim(),amount:Number($('moneyAmount').value),category:$('moneyCategory').value,date:$('moneyDate').value});save('lt_transactions',transactions);$('moneyTitle').value='';$('moneyAmount').value='';render()});
+function deleteTransaction(id){if(confirm('Hapus transaksi ini?')){transactions=transactions.filter(t=>t.id!==id);save('lt_transactions',transactions);render()}}
+function renderMoney(){let income=transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0),expense=transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);$('moneyIncome').textContent=rupiah(income);$('moneyExpense').textContent=rupiah(expense);$('moneyBalance').textContent=rupiah(income-expense);$('moneyCount').textContent=transactions.length;$('statBalance').textContent=rupiah(income-expense);$('statExpense').textContent=rupiah(expense);
+const tx=t=>`<div class="transaction"><div><div class="item-title">${escapeHtml(t.title)}</div><div class="item-meta">${escapeHtml(t.category)} · ${t.date}</div></div><div style="text-align:right"><div class="${t.type==='income'?'positive':'negative'}" style="font-weight:700">${t.type==='income'?'+':'−'}${rupiah(t.amount)}</div><button class="btn danger small" onclick="deleteTransaction(${t.id})">Hapus</button></div></div>`;
+$('transactionList').innerHTML=transactions.length?transactions.map(tx).join(''):'<div class="empty">Belum ada transaksi yang dicatat.</div>';
+$('dashMoney').innerHTML=transactions.length?transactions.slice(0,4).map(t=>`<div class="transaction"><div><div class="item-title">${escapeHtml(t.title)}</div><div class="item-meta">${t.date}</div></div><div class="${t.type==='income'?'positive':'negative'}">${t.type==='income'?'+':'−'}${rupiah(t.amount)}</div></div>`).join(''):'<div class="empty">Transaksi terbaru akan muncul di sini.</div>';
+let days=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let key=d.toISOString().slice(0,10);days.push({key,label:d.toLocaleDateString('id-ID',{weekday:'short'}),amount:transactions.filter(t=>t.type==='expense'&&t.date===key).reduce((s,t)=>s+t.amount,0)})}let max=Math.max(...days.map(d=>d.amount),1);$('weeklyChart').innerHTML=days.map(d=>`<div class="bar-col"><div class="bar" title="${rupiah(d.amount)}" style="height:${Math.max(4,d.amount/max*100)}%"></div><div class="bar-label">${d.label}</div></div>`).join('');
+}
+$('linkForm').addEventListener('submit',e=>{e.preventDefault();let url=$('linkUrl').value.trim();if(!/^https?:\/\//i.test(url))url='https://'+url;links.unshift({id:Date.now(),title:$('linkTitle').value.trim(),url,tag:$('linkTag').value.trim()||'Umum',date:todayKey()});save('lt_links',links);$('linkTitle').value='';$('linkUrl').value='';$('linkTag').value='';render()});
+$('linkSearch').addEventListener('input',renderLinks);
+function deleteLink(id){if(confirm('Hapus link ini?')){links=links.filter(l=>l.id!==id);save('lt_links',links);render()}}
+function renderLinks(){let q=$('linkSearch').value.toLowerCase(),filtered=links.filter(l=>(l.title+' '+l.url+' '+l.tag).toLowerCase().includes(q));$('linkCount').textContent=links.length+' links';$('statLinks').textContent=links.length;
+const card=l=>`<div class="item"><div class="item-main"><div class="item-title">${escapeHtml(l.title)}</div><a class="link-url" href="${escapeAttr(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.url)}</a><div class="item-meta"><span class="badge">${escapeHtml(l.tag)}</span> · ${l.date}</div></div><div class="item-actions"><a class="btn secondary small" href="${escapeAttr(l.url)}" target="_blank" rel="noopener">Buka ↗</a><button class="btn danger small" onclick="deleteLink(${l.id})">×</button></div></div>`;
+$('linkList').innerHTML=filtered.length?filtered.map(card).join(''):'<div class="empty">Link tidak ditemukan. Simpan link pertamamu.</div>';
+$('dashLinks').innerHTML=links.length?links.slice(0,3).map(l=>`<div class="item"><div class="item-main"><div class="item-title">${escapeHtml(l.title)}</div><div class="link-url">${escapeHtml(l.url)}</div></div><span class="badge">${escapeHtml(l.tag)}</span></div>`).join(''):'<div class="empty">Link favoritmu akan muncul di sini.</div>';
+}
+// Notes: create, edit, search, and store locally
+$('noteForm').addEventListener('submit',e=>{e.preventDefault();const title=$('noteTitle').value.trim(),body=$('noteBody').value.trim();if(!title||!body)return;const now=new Date().toISOString();if(editingNoteId!==null){notes=notes.map(n=>n.id===editingNoteId?{...n,title,body,category:$('noteCategory').value,updatedAt:now}:n)}else{notes.unshift({id:Date.now(),title,body,category:$('noteCategory').value,createdAt:now,updatedAt:now})}save('lt_notes',notes);resetNoteForm();render()});
+$('noteSearch').addEventListener('input',renderNotes);
+function editNote(id){const n=notes.find(x=>x.id===id);if(!n)return;editingNoteId=id;$('noteTitle').value=n.title;$('noteBody').value=n.body;$('noteCategory').value=n.category||'Personal';$('noteSubmit').textContent='Simpan perubahan';$('noteCancel').hidden=false;showPage('notes');$('noteTitle').focus()}
+function resetNoteForm(){editingNoteId=null;$('noteForm').reset();$('noteSubmit').textContent='+ Simpan catatan';$('noteCancel').hidden=true}
+function cancelNoteEdit(){resetNoteForm()}
+function deleteNote(id){if(confirm('Hapus catatan ini?')){notes=notes.filter(n=>n.id!==id);save('lt_notes',notes);if(editingNoteId===id)resetNoteForm();render()}}
+function renderNotes(){if(!$('noteList'))return;const q=$('noteSearch').value.trim().toLowerCase();const filtered=notes.filter(n=>(n.title+' '+n.body+' '+(n.category||'')).toLowerCase().includes(q));$('noteCount').textContent=notes.length+' catatan';$('statNotes').textContent=notes.length;const dateText=n=>new Date(n.updatedAt||n.createdAt).toLocaleString('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});const card=n=>`<div class="item" style="align-items:flex-start"><div class="item-main"><div class="item-title">${escapeHtml(n.title)}</div><div class="item-meta"><span class="badge">${escapeHtml(n.category||'Personal')}</span> · Diperbarui ${dateText(n)}</div><div style="white-space:pre-wrap;overflow-wrap:anywhere;margin-top:9px;color:#c5cee2">${escapeHtml(n.body)}</div></div><div class="item-actions"><button class="btn secondary small" onclick="editNote(${n.id})">Edit</button><button class="btn danger small" onclick="deleteNote(${n.id})">Hapus</button></div></div>`;$('noteList').innerHTML=filtered.length?filtered.map(card).join(''):'<div class="empty">'+(notes.length?'Catatan tidak ditemukan.':'Belum ada catatan. Tulis catatan pertamamu di atas.')+'</div>';const recent=[...notes].sort((a,b)=>new Date(b.updatedAt||b.createdAt)-new Date(a.updatedAt||a.createdAt)).slice(0,3);$('dashNotes').innerHTML=recent.length?recent.map(n=>`<div class="item"><div class="item-main"><div class="item-title">${escapeHtml(n.title)}</div><div class="item-meta">${escapeHtml(n.category||'Personal')} · ${dateText(n)}</div><div class="item-meta" style="margin-top:5px">${escapeHtml(n.body.slice(0,110))}${n.body.length>110?'…':''}</div></div><button class="btn secondary small" onclick="editNote(${n.id})">Buka</button></div>`).join(''):'<div class="empty">Catatan terbarumu akan tampil di sini.</div>'}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escapeAttr(s){return escapeHtml(s)}
+function render(){renderHabits();renderMoney();renderLinks();renderNotes()}
+// Calendar, reminders, and browser alarms
+let schedules=load('lt_schedules');
+let alarmEnabled=false, alarmAudio=null, alarmLoop=null;
+$('scheduleDate').value=(()=>{let d=new Date(Date.now()+3600000);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)})();
+$('scheduleForm').addEventListener('submit',e=>{e.preventDefault();const dt=new Date($('scheduleDate').value);if(!Number.isFinite(dt.getTime()))return alert('Tanggal/jam tidak valid.');if(dt.getTime()<=Date.now())return alert('Pilih waktu di masa depan.');schedules.push({id:Date.now(),title:$('scheduleTitle').value.trim(),datetime:dt.toISOString(),kind:$('scheduleKind').value,note:$('scheduleNote').value.trim(),fired:false});schedules.sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));save('lt_schedules',schedules);$('scheduleTitle').value='';$('scheduleNote').value='';renderSchedule();});
+function calendarUrl(item){let start=new Date(item.datetime),end=new Date(start.getTime()+30*60000),fmt=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(item.title)+'&dates='+fmt(start)+'/'+fmt(end)+'&details='+encodeURIComponent(item.note||'Dibuat dari LifeTrack')}
+function deleteSchedule(id){if(confirm('Hapus jadwal ini?')){schedules=schedules.filter(x=>x.id!==id);save('lt_schedules',schedules);renderSchedule()}}
+function renderSchedule(){let upcoming=schedules.filter(x=>new Date(x.datetime).getTime()>Date.now());$('scheduleCount').textContent=schedules.length+' jadwal';$('scheduleList').innerHTML=schedules.length?schedules.map(x=>{let d=new Date(x.datetime);return `<div class="item"><div class="item-main"><div class="item-title">${escapeHtml(x.title)}</div><div class="schedule-date">${d.toLocaleString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})} · ${escapeHtml(x.kind)}</div>${x.note?`<div class="item-meta">${escapeHtml(x.note)}</div>`:''}${x.fired?'<span class="badge">Alarm sudah berbunyi</span>':''}</div><div class="item-actions"><a class="btn secondary small" href="${calendarUrl(x)}" target="_blank" rel="noopener">Google Calendar</a><button class="btn danger small" onclick="deleteSchedule(${x.id})">Hapus</button></div></div>`}).join(''):'<div class="empty">Belum ada agenda atau alarm. Tambahkan jadwal di atas.</div>';}
+async function enableAlarm(){try{if('Notification'in window){let permission=await Notification.requestPermission();if(permission!=='granted'){alert('Izin notifikasi belum diberikan. Aktifkan melalui pengaturan browser.');return}}alarmEnabled=true;try{alarmAudio=new (window.AudioContext||window.webkitAudioContext)();await alarmAudio.resume();const osc=alarmAudio.createOscillator(),gain=alarmAudio.createGain();osc.frequency.value=660;gain.gain.value=0.0001;osc.connect(gain);gain.connect(alarmAudio.destination);osc.start();osc.stop(alarmAudio.currentTime+0.04)}catch(e){}$('alarmStatus').textContent='Notifikasi dan suara diizinkan. Jangan tutup tab untuk alarm.';$('alarmStatus').classList.add('alarm-active');$('enableAlarm').textContent='Alarm diaktifkan';if(!alarmLoop)alarmLoop=setInterval(checkAlarms,10000);checkAlarms()}catch(e){alert('Browser tidak mendukung izin notifikasi.')}}
+function playAlarm(){if(!alarmAudio)return;try{alarmAudio.resume();let now=alarmAudio.currentTime;for(let i=0;i<3;i++){let osc=alarmAudio.createOscillator(),gain=alarmAudio.createGain();osc.type='sine';osc.frequency.value=740+i*100;gain.gain.setValueAtTime(.001,now+i*.28);gain.gain.exponentialRampToValueAtTime(.16,now+i*.28+.04);gain.gain.exponentialRampToValueAtTime(.001,now+i*.28+.22);osc.connect(gain);gain.connect(alarmAudio.destination);osc.start(now+i*.28);osc.stop(now+i*.28+.24)}}catch(e){}}
+function checkAlarms(){if(!alarmEnabled)return;let now=Date.now(),changed=false;schedules.forEach(x=>{if(!x.fired&&new Date(x.datetime).getTime()<=now){x.fired=true;changed=true;if('Notification'in window&&Notification.permission==='granted'){let n=new Notification('LifeTrack · '+x.title,{body:x.note||'Waktunya sesuai jadwal.',tag:String(x.id)});n.onclick=()=>window.focus()}if(x.kind==='alarm')playAlarm();else playAlarm()}});if(changed){save('lt_schedules',schedules);renderSchedule()}}
+function exportCalendar(){if(!schedules.length){alert('Belum ada jadwal untuk diekspor.');return}const esc=v=>String(v||'').replace(/\\/g,'\\\\').replace(/,/g,'\\,').replace(/;/g,'\\;').replace(/\n/g,'\\n');const fmt=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');let body=schedules.map(x=>`BEGIN:VEVENT\r\nUID:${x.id}@lifetrack.local\r\nDTSTAMP:${fmt(new Date())}\r\nDTSTART:${fmt(x.datetime)}\r\nDTEND:${fmt(new Date(new Date(x.datetime).getTime()+1800000))}\r\nSUMMARY:${esc(x.title)}\r\nDESCRIPTION:${esc(x.note||'LifeTrack reminder')}\r\nEND:VEVENT`).join('\r\n');let blob=new Blob(['BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//LifeTrack//Calendar//ID\r\nCALSCALE:GREGORIAN\r\n'+body+'\r\nEND:VCALENDAR'],{type:'text/calendar;charset=utf-8'});let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='lifetrack-calendar.ics';a.click();URL.revokeObjectURL(url)}
+
+// AI chat frontend: securely proxies requests through a configured server endpoint.
+let aiHistory=load('lt_ai_history',[]);
+const aiEndpointInput=$('aiEndpoint'), aiStatus=$('aiStatus'), aiChatLog=$('aiChatLog');
+aiEndpointInput.value=localStorage.getItem('lt_ai_endpoint')||'';
+function safeChatText(text){return escapeHtml(text).replace(/\n/g,'<br>')}
+function drawAIHistory(){
+  aiChatLog.innerHTML='';
+  if(!aiHistory.length){aiChatLog.innerHTML='<div class="chat-msg ai"><div class="msg-role">LifeTrack AI</div>Mulai percakapan dengan menuliskan pertanyaanmu.</div>';return}
+  aiHistory.forEach(m=>{let el=document.createElement('div');el.className='chat-msg '+(m.role==='user'?'user':'ai');el.innerHTML='<div class="msg-role">'+(m.role==='user'?'Kamu':'LifeTrack AI')+'</div>'+safeChatText(m.content);aiChatLog.appendChild(el)});
+  aiChatLog.scrollTop=aiChatLog.scrollHeight;
+}
+$('aiSaveEndpoint').addEventListener('click',()=>{
+  let endpoint=aiEndpointInput.value.trim();
+  if(endpoint&&!/^https?:\/\//i.test(endpoint)){aiStatus.textContent='Endpoint harus berupa URL http:// atau https://';return}
+  localStorage.setItem('lt_ai_endpoint',endpoint);aiStatus.textContent=endpoint?'Endpoint tersimpan. Chat siap dicoba.':'Endpoint dihapus.';
+});
+$('aiClearChat').addEventListener('click',()=>{if(confirm('Hapus seluruh riwayat chat?')){aiHistory=[];save('lt_ai_history',aiHistory);drawAIHistory()}});
+$('aiChatForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const prompt=$('aiPrompt').value.trim();if(!prompt)return;
+  const endpoint=localStorage.getItem('lt_ai_endpoint');
+  if(!endpoint){aiStatus.textContent='Konfigurasi endpoint backend terlebih dahulu.';return}
+  aiHistory.push({role:'user',content:prompt});save('lt_ai_history',aiHistory);drawAIHistory();$('aiPrompt').value='';
+  $('aiTyping').hidden=false;$('aiSend').disabled=true;aiStatus.textContent='Menghubungi AI...';
+  try{
+    const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:prompt,history:aiHistory.slice(-20)})});
+    if(!response.ok)throw new Error('Server merespons HTTP '+response.status);
+    const data=await response.json();const reply=data.reply||data.message||data.output;
+    if(typeof reply!=='string'||!reply.trim())throw new Error('Format balasan tidak sesuai. Server perlu mengembalikan { "reply": "..." }.');
+    aiHistory.push({role:'assistant',content:reply});save('lt_ai_history',aiHistory);drawAIHistory();aiStatus.textContent='Terhubung — jawaban diterima.';
+  }catch(err){aiHistory.push({role:'assistant',content:'Maaf, belum bisa menghubungi layanan AI. Periksa endpoint, koneksi internet, CORS, dan server backend. Detail: '+err.message});save('lt_ai_history',aiHistory);drawAIHistory();aiStatus.textContent='Gagal terhubung. Periksa konfigurasi.'}
+  finally{$('aiTyping').hidden=true;$('aiSend').disabled=false}
+});
+drawAIHistory();
+
+render();renderSchedule();
+
+</script>
+</body>
+</html>
